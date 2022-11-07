@@ -1,4 +1,4 @@
-package telran.java2022.forum.service;
+package telran.java2022.forum.post.service;
 
 import java.util.List;
 

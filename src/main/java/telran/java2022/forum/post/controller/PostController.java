@@ -19,7 +19,7 @@ import telran.java2022.forum.post.dto.PeriodDto;
 import telran.java2022.forum.post.dto.PostCreateDto;
 import telran.java2022.forum.post.dto.PostDto;
 import telran.java2022.forum.post.dto.PostUpdateDto;
-import telran.java2022.forum.service.PostService;
+import telran.java2022.forum.post.service.PostService;
 
 @RestController
 @RequiredArgsConstructor
