@@ -25,7 +25,6 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDto register(RegisterUserDto registerUserDto) {
-		System.out.println("Service - start");
 		if (userRepository.findById(registerUserDto.getLogin()).isPresent()) {
 			throw new UserAlreadyExistsException(registerUserDto.getLogin());
 		}
