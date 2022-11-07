@@ -5,8 +5,11 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import telran.java2022.forum.user.dao.UserRepository;
-import telran.java2022.forum.user.dto.RegisterDto;
+import telran.java2022.forum.user.dto.LoginUserDto;
+import telran.java2022.forum.user.dto.RegisterUserDto;
+import telran.java2022.forum.user.dto.UpdateUserDto;
 import telran.java2022.forum.user.dto.UserDto;
+import telran.java2022.forum.user.dto.UserRolesDto;
 import telran.java2022.forum.user.dto.exceptions.IncorrectPasswordException;
 import telran.java2022.forum.user.dto.exceptions.UserAlreadyExistsException;
 import telran.java2022.forum.user.dto.exceptions.UserDoesNotExistException;
@@ -21,63 +24,66 @@ public class UserServiceImpl implements UserService {
 	final UserRepository userRepository;
 
 	@Override
-	public UserDto register(RegisterDto registerDto) {
-		if (userRepository.findById(registerDto.getLogin()).isPresent()) {
-			throw new UserAlreadyExistsException(registerDto.getLogin());
+	public UserDto register(RegisterUserDto registerUserDto) {
+		System.out.println("Service - start");
+		if (userRepository.findById(registerUserDto.getLogin()).isPresent()) {
+			throw new UserAlreadyExistsException(registerUserDto.getLogin());
 		}
-		User user = modelMapper.map(registerDto, User.class);
+		User user = modelMapper.map(registerUserDto, User.class);
 		user = userRepository.save(user);
-		System.out.println(user);
-		return modelMapper.map(user, UserDto.class);
+		return new UserDto(user.getLogin(), user.getFirstName(), user.getLastName(), user.getRoles());
 	}
 
 	@Override
-	public UserDto login(RegisterDto registerDto) {
-		User user = userRepository.findById(registerDto.getLogin())
-				.orElseThrow(() -> new UserDoesNotExistException(registerDto.getLogin()));
-		if (!(registerDto.getPassword().equals(user.getPassword()))) {
+	public UserDto login(LoginUserDto loginUserDto) {
+		User user = userRepository.findById(loginUserDto.getLogin())
+				.orElseThrow(() -> new UserDoesNotExistException(loginUserDto.getLogin()));
+		if (!(loginUserDto.getPassword().equals(user.getPassword()))) {
 			throw new IncorrectPasswordException();
 		}
-		return modelMapper.map(user, UserDto.class);
+		return new UserDto(user.getLogin(), user.getFirstName(), user.getLastName(), user.getRoles());
 	}
 
 	@Override
 	public UserDto deleteUser(String userString) {
 		User user = userRepository.findById(userString).orElseThrow(() -> new UserDoesNotExistException(userString));
-		UserDto userDto = modelMapper.map(user, UserDto.class);
+		UserDto userDto = new UserDto(user.getLogin(), user.getFirstName(), user.getLastName(), user.getRoles());
 		userRepository.deleteById(userString);
 		return userDto;
 	}
 
 	@Override
-	public UserDto updateUser(RegisterDto registerDto, String userString) {
+	public UserDto updateUser(UpdateUserDto updateUserDto, String userString) {
 		User user = userRepository.findById(userString).orElseThrow(() -> new UserDoesNotExistException(userString));
-		user.setFirstName(registerDto.getFirstName());
-		user.setLastName(registerDto.getLastName());
-		return modelMapper.map(userRepository.save(user), UserDto.class);
+		user.setFirstName(updateUserDto.getFirstName());
+		user.setLastName(updateUserDto.getLastName());
+		user = userRepository.save(user);
+		return new UserDto(user.getLogin(), user.getFirstName(), user.getLastName(), user.getRoles());
 	}
 
 	@Override
-	public UserDto addRole(String userString, Role role) {
+	public UserRolesDto addRole(String userString, Role role) {
 		User user = userRepository.findById(userString).orElseThrow(() -> new UserDoesNotExistException(userString));
 		user.addRole(role);
-		return modelMapper.map(userRepository.save(user), UserDto.class);
+		user = userRepository.save(user);
+		return new UserRolesDto(user.getLogin(),user.getRoles());
 	}
 
 	@Override
-	public UserDto deleteRole(String userString, Role role) {
+	public UserRolesDto deleteRole(String userString, Role role) {
 		User user = userRepository.findById(userString).orElseThrow(() -> new UserDoesNotExistException(userString));
 		if (user.deleteRole(role)) {
-			return modelMapper.map(userRepository.save(user), UserDto.class);
+			user = userRepository.save(user);
+			return new UserRolesDto(user.getLogin(),user.getRoles());
 		}
 		throw new UserDoesNotHaveThisRoleAssignedException(role, userString);
 	}
 
 	@Override
-	public void changePassword(RegisterDto registerDto) {
-		User user = userRepository.findById(registerDto.getLogin())
-				.orElseThrow(() -> new UserDoesNotExistException(registerDto.getLogin()));
-		user.setPassword(registerDto.getPassword());
+	public void changePassword(LoginUserDto changePasswordDto) {
+		User user = userRepository.findById(changePasswordDto.getLogin())
+				.orElseThrow(() -> new UserDoesNotExistException(changePasswordDto.getLogin()));
+		user.setPassword(changePasswordDto.getPassword());
 		userRepository.save(user);
 	}
 

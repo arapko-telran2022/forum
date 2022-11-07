@@ -1,17 +1,20 @@
 package telran.java2022.forum.user.model;
 
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @EqualsAndHashCode(of = "login")
@@ -25,15 +28,15 @@ public class User {
 	@Setter
 	String lastName;
 	@Setter
-	String password;
-	Set<Role> roles = new HashSet<>();
+	String password;	
+	EnumSet<Role> roles = EnumSet.of(Role.Guest, Role.User);
 
-	public User(String login, String firstName, String lastName) {
+	public User(String login, String password, String firstName, String lastName) {
+		System.out.println();
 		this.login = login;
+		this.password = password;
 		this.firstName = firstName;
-		this.lastName = lastName;
-		roles.add(Role.GUEST);
-		roles.add(Role.USER);
+		this.lastName = lastName;	
 	}
 
 	public void addRole(Role role) {

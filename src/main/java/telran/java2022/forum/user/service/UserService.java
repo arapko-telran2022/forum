@@ -1,23 +1,26 @@
 package telran.java2022.forum.user.service;
 
-import telran.java2022.forum.user.dto.RegisterDto;
+import telran.java2022.forum.user.dto.LoginUserDto;
+import telran.java2022.forum.user.dto.RegisterUserDto;
+import telran.java2022.forum.user.dto.UpdateUserDto;
 import telran.java2022.forum.user.dto.UserDto;
+import telran.java2022.forum.user.dto.UserRolesDto;
 import telran.java2022.forum.user.model.Role;
 
 public interface UserService {
 
-    UserDto register(RegisterDto registerDto);
+    UserDto register(RegisterUserDto registeUserDto);
 
-    UserDto login(RegisterDto registerDto);
+    UserDto login(LoginUserDto loginUserDto);
 
     UserDto deleteUser(String user);
 
-    UserDto updateUser(RegisterDto registerDto, String user);
+    UserDto updateUser(UpdateUserDto updateUserDto, String user); 
 
-    UserDto addRole(String user, Role role);
+    UserRolesDto addRole(String user, Role role);
 
-    UserDto deleteRole(String user, Role role);
+    UserRolesDto deleteRole(String user, Role role);
 
-    void changePassword(RegisterDto registerDto);
+    void changePassword(LoginUserDto changePasswordDto);
 
 }
