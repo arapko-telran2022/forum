@@ -1,4 +1,4 @@
-package telran.java2022.forum.controller;
+package telran.java2022.forum.post.controller;
 
 import java.util.List;
 
@@ -14,17 +14,17 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import telran.java2022.forum.dto.CommentCreateDto;
-import telran.java2022.forum.dto.PeriodDto;
-import telran.java2022.forum.dto.PostCreateDto;
-import telran.java2022.forum.dto.PostDto;
-import telran.java2022.forum.dto.PostUpdateDto;
+import telran.java2022.forum.post.dto.CommentCreateDto;
+import telran.java2022.forum.post.dto.PeriodDto;
+import telran.java2022.forum.post.dto.PostCreateDto;
+import telran.java2022.forum.post.dto.PostDto;
+import telran.java2022.forum.post.dto.PostUpdateDto;
 import telran.java2022.forum.service.PostService;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(name = "/forum")
-public class ForumController {
+public class PostController {
 
 	final String endPoint = "/post";
 	final String endPointForList = "/posts";

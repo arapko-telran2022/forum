@@ -7,16 +7,16 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import telran.java2022.forum.dao.PostRepository;
-import telran.java2022.forum.dto.CommentCreateDto;
-import telran.java2022.forum.dto.PeriodDto;
-import telran.java2022.forum.dto.PostCreateDto;
-import telran.java2022.forum.dto.PostDto;
-import telran.java2022.forum.dto.PostUpdateDto;
-import telran.java2022.forum.dto.exceptions.PostAuthorNotFoundException;
-import telran.java2022.forum.dto.exceptions.PostNotFoundException;
-import telran.java2022.forum.model.Comment;
-import telran.java2022.forum.model.Post;
+import telran.java2022.forum.post.dao.PostRepository;
+import telran.java2022.forum.post.dto.CommentCreateDto;
+import telran.java2022.forum.post.dto.PeriodDto;
+import telran.java2022.forum.post.dto.PostCreateDto;
+import telran.java2022.forum.post.dto.PostDto;
+import telran.java2022.forum.post.dto.PostUpdateDto;
+import telran.java2022.forum.post.dto.exceptions.PostAuthorNotFoundException;
+import telran.java2022.forum.post.dto.exceptions.PostNotFoundException;
+import telran.java2022.forum.post.model.Comment;
+import telran.java2022.forum.post.model.Post;
 
 @Service
 @RequiredArgsConstructor
