@@ -10,11 +10,13 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @NoArgsConstructor
 @Getter
 @EqualsAndHashCode(of = "login")
 @Document(collection = "user")
+@ToString
 public class User {
 	@Id
 	String login;
@@ -31,6 +33,7 @@ public class User {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		roles.add(Role.GUEST);
+		roles.add(Role.USER);
 	}
 
 	public void addRole(Role role) {

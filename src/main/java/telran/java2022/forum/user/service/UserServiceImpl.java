@@ -26,7 +26,9 @@ public class UserServiceImpl implements UserService {
 			throw new UserAlreadyExistsException(registerDto.getLogin());
 		}
 		User user = modelMapper.map(registerDto, User.class);
-		return modelMapper.map(userRepository.save(user), UserDto.class);
+		user = userRepository.save(user);
+		System.out.println(user);
+		return modelMapper.map(user, UserDto.class);
 	}
 
 	@Override
