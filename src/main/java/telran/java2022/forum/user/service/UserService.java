@@ -22,5 +22,5 @@ public interface UserService {
     UserRolesDto deleteRole(String user, Role role);
 
     void changePassword(LoginUserDto changePasswordDto);
-
+ 
 }
