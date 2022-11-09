@@ -42,7 +42,14 @@ public class UserServiceImpl implements UserService {
 		}
 		return new UserDto(user.getLogin(), user.getFirstName(), user.getLastName(), user.getRoles());
 	}
-
+	
+	@Override
+	public UserDto login(String login) {
+		User user = userRepository.findById(login)
+				.orElseThrow(() -> new UserDoesNotExistException(login));
+		return new UserDto(user.getLogin(), user.getFirstName(), user.getLastName(), user.getRoles());
+	}
+	
 	@Override
 	public UserDto deleteUser(String userString) {
 		User user = userRepository.findById(userString).orElseThrow(() -> new UserDoesNotExistException(userString));

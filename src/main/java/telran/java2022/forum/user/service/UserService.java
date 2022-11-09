@@ -12,6 +12,8 @@ public interface UserService {
     UserDto register(RegisterUserDto registeUserDto);
 
     UserDto login(LoginUserDto loginUserDto);
+    
+    UserDto login(String login);
 
     UserDto deleteUser(String user);
 
