@@ -35,8 +35,8 @@ public class AuthenticationFilter implements Filter {
 			String[] credentials = getCredentialsFromToken(token);	
 			User user = userRepository.findById(credentials[0]).orElseThrow(() -> new UserDoesNotExistException(credentials[0]));
 			Boolean checkAuth = user.getPassword().equals(credentials[1]);		
-			Boolean checRole = user.getRoles().contains(Role.User);
-			if(token == null || !checkAuth || !checRole) {
+			Boolean checkRole = user.getRoles().contains(Role.User);
+			if(token == null || !checkAuth || !checkRole) {
 				response.sendError(401);
 				return;
 			}
