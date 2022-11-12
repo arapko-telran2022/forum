@@ -1,8 +1,6 @@
 package telran.java2022.forum.user.model;
 
 import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -29,7 +27,7 @@ public class User {
 	String lastName;
 	@Setter
 	String password;	
-	EnumSet<Role> roles = EnumSet.of(Role.Guest, Role.User);
+	EnumSet<Role> roles = EnumSet.of(Role.GUEST, Role.USER);
 
 	public User(String login, String password, String firstName, String lastName) {
 		System.out.println();

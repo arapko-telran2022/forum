@@ -23,7 +23,7 @@ import telran.java2022.forum.post.service.PostService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(name = "/forum")
+@RequestMapping("/forum")
 public class PostController {
 
 	final String endPoint = "/post";
@@ -46,25 +46,11 @@ public class PostController {
 	public void addLike(@PathVariable String id) {
 		postService.addLike(id);
 	}
-
-//------------------------------------------------------------------------------------------	
+	
 	@GetMapping(endPointForList + "/author/{author}")
 	public List<PostDto> findPostsByAuthor(@PathVariable String author) {
 		return postService.findPostsByAuthor(author);
-//		List<PostDto> res = postService.findPostsByAuthor(author);
-//		return res.size() == 0 ? findPostsByAuthorEnpty(res) : findPostsByAuthorFull(res);
 	}
-
-//	@ResponseStatus(HttpStatus.NO_CONTENT)
-//	public List<PostDto> findPostsByAuthorEnpty(List<PostDto> res) {
-//		return res;
-//	}
-//
-//	@ResponseStatus(HttpStatus.OK)
-//	public List<PostDto> findPostsByAuthorFull(List<PostDto> res) {
-//		return res;
-//	}
-//------------------------------------------------------------------------------------------		
 
 	@PutMapping(endPoint + "/{id}/comment/{user}")
 	public PostDto addComment(@PathVariable String id, @PathVariable String user, @RequestBody CommentCreateDto commentCreateDto) {

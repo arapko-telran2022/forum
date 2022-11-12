@@ -1,5 +1,6 @@
 package telran.java2022.forum.user.service;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,8 @@ public class UserServiceImpl implements UserService {
 			throw new UserAlreadyExistsException(registerUserDto.getLogin());
 		}
 		User user = modelMapper.map(registerUserDto, User.class);
+		String password = BCrypt.hashpw(registerUserDto.getPassword(), BCrypt.gensalt());
+		user.setPassword(password);
 		user = userRepository.save(user);
 		return new UserDto(user.getLogin(), user.getFirstName(), user.getLastName(), user.getRoles());
 	}
@@ -86,10 +89,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void changePassword(LoginUserDto changePasswordDto) {
-		User user = userRepository.findById(changePasswordDto.getLogin())
-				.orElseThrow(() -> new UserDoesNotExistException(changePasswordDto.getLogin()));
-		user.setPassword(changePasswordDto.getPassword());
+	public void changePassword(String login, String newPassword) {
+		User user = userRepository.findById(login)
+				.orElseThrow(() -> new UserDoesNotExistException(login));
+		String password = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+		user.setPassword(password);
 		userRepository.save(user);
 	}
 

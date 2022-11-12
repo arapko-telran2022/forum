@@ -1,6 +1,6 @@
 package telran.java2022.forum.user.controller;
 
-import java.util.Base64;
+import java.security.Principal;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import telran.java2022.forum.user.dto.LoginUserDto;
 import telran.java2022.forum.user.dto.RegisterUserDto;
 import telran.java2022.forum.user.dto.UpdateUserDto;
 import telran.java2022.forum.user.dto.UserDto;
@@ -33,19 +32,11 @@ public class UserController {
 		return userService.register(registerUserDto);
 	}
 
-//	@PostMapping("/login")
-//	public UserDto login(@RequestBody LoginUserDto loginUserDto) {
-//		return userService.login(loginUserDto);
-//	}
-	
 	@PostMapping("/login")
-	public UserDto login(@RequestHeader("Authorization") String token) {
-		String[] basicAuth = token.split(" ");
-		String decode = new String(Base64.getDecoder().decode(basicAuth[1]));
-		String[] credentials = decode.split(":");
-		return userService.login(credentials[0]);
+	public UserDto login(Principal principal) {
+		return userService.login(principal.getName());
 	}
-	
+
 	@DeleteMapping("/user/{user}")
 	public UserDto deleteUser(@PathVariable String user) {
 		return userService.deleteUser(user);
@@ -57,18 +48,30 @@ public class UserController {
 	}
 
 	@PutMapping("/user/{user}/role/{role}")
-	public UserRolesDto addRole(@PathVariable String user, @PathVariable Role role) {
-		return userService.addRole(user, role);
+	public UserRolesDto addRole(@PathVariable String user, @PathVariable String role) {
+		Role rl;
+		try {
+			rl = Role.valueOf(role.toUpperCase());
+		} catch (Exception e) {
+			rl = Role.GUEST;
+		}
+		return userService.addRole(user, rl);
 	}
 
 	@DeleteMapping("/user/{user}/role/{role}")
-	public UserRolesDto deleteRole(@PathVariable String user, @PathVariable Role role) {
-		return userService.deleteRole(user, role);
+	public UserRolesDto deleteRole(@PathVariable String user, @PathVariable String role) {
+		Role rl;
+		try {
+			rl = Role.valueOf(role.toUpperCase());
+			return userService.deleteRole(user, rl);
+		} catch (Exception e) {
+			return userService.addRole(user, Role.GUEST);
+		}
 	}
 
 	@PutMapping("/password")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void changePassword(@RequestBody LoginUserDto changePasswordDto) {
-		userService.changePassword(changePasswordDto);
+	public void changePassword(Principal principal, @RequestHeader("X-Password") String newPassword) {
+		userService.changePassword(principal.getName(), newPassword);
 	}
 }
