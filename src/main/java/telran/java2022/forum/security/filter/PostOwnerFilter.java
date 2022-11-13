@@ -48,8 +48,11 @@ public class PostOwnerFilter implements Filter {
 				}
 			} else {
 				Boolean checkRole = ua.getRoles().contains(Role.MODERATOR);
-				Post post = postRepository.findById(path.split("/")[3])
-						.orElseThrow(() -> new PostNotFoundException(path.split("/")[3]));
+				Post post = postRepository.findById(path.split("/")[3]).orElse(null);
+				if (post == null) {
+					response.sendError(404, "Post not found");
+					return;
+				}
 				Boolean owner = post.getAuthor().equals(ua.getLogin());
 				if (!(owner || ("DELETE".equalsIgnoreCase(method) && checkRole))) {
 					response.sendError(403, "You aren't OWNER or ROLE is invalid");

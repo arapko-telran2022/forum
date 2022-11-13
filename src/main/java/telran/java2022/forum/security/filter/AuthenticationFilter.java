@@ -45,12 +45,14 @@ public class AuthenticationFilter implements Filter {
 				response.sendError(401, "Invalid token");
 				return;
 			}
-
-			User ua = userRepository.findById(credentials[0])
-					.orElseThrow(() -> new UserDoesNotExistException(credentials[0]));
+			User ua = userRepository.findById(credentials[0]).orElse(null);
+			if (token == null || ua == null) {
+				response.sendError(401, "Login or password is invalid");
+				return;
+			}
 			Boolean checkAuth = BCrypt.checkpw(credentials[1], ua.getPassword());
 			Boolean checkRole = ua.getRoles().contains(Role.USER);
-			if (token == null || !checkAuth || !checkRole) {
+			if (!checkAuth || !checkRole) {
 				response.sendError(401, "Login or password is invalid");
 				return;
 			}
